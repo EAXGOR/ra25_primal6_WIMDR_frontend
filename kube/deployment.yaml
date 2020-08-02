@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sih-final-frontend-deployment
+  labels:
+    name: sih-final-frontend-deployment
+    app: sih-final-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: sih-final-frontend-pod
+  template:
+    metadata:
+      name: sih-final-frontend-pod
+      labels:
+        name: sih-final-frontend-pod
+        app: sih-final-frontend
+    spec:
+      containers:
+        - name: sih-final-frontend
+          image: asia.gcr.io/PROJECT_ID/IMAGE:TAG
