@@ -6,6 +6,7 @@ import client from './GraphQL/client';
 import { AuthContext } from './context/Context';
 import './App.css';
 import LandingPage from './views/landinPage/landingPage';
+import MainApp from './views/mapApp/mapApp';
 
 function App() {
   const [isLoggedIn, changeIsLoggedIn] = useState(cookie.get('signedin') === 'true');
@@ -25,7 +26,18 @@ function App() {
             <Route exact path="/">
               <LandingPage />
             </Route>
-            <Route exact path="/map" />
+            <Route exact path="/map">
+              {isLoggedIn ? (
+                <MainApp
+                  googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBbimgXHjyObzS-WpF4LXZ1T1585TnEoh4&v=3.exp&libraries=geometry,drawing,places"
+                  loadingElement={<div style={{ height: `100vh` }} />}
+                  containerElement={<div style={{ height: `100vh` }} />}
+                  mapElement={<div style={{ height: `100%` }} />}
+                />
+              ) : (
+                <LandingPage />
+              )}
+            </Route>
           </Switch>
         </BrowserRouter>
       </AuthContext.Provider>

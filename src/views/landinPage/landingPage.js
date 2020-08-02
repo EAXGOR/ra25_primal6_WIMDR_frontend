@@ -72,16 +72,16 @@ const Modal = ({ mode, closeModal }) => {
             signup({
               variables: {
                 ...data,
-                lat: String(positionObj.coords.latitude),
-                lng: String(positionObj.coords.longitude),
+                lat: positionObj.coords.latitude.toString(),
+                lng: positionObj.coords.longitude.toString(),
               },
             });
           } else {
             signin({
               variables: {
                 ...data,
-                lat: String(positionObj.coords.latitude),
-                lng: String(positionObj.coords.longitude),
+                lat: positionObj.coords.latitude.toString(),
+                lng: positionObj.coords.longitude.toString(),
               },
             });
           }

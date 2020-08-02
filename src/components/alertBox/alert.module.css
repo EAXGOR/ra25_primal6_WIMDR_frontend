@@ -1,0 +1,15 @@
+.alertBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  background: transparent linear-gradient(90deg, #f32121 0%, #ff6161 100%) 0% 0% no-repeat
+    padding-box;
+  width: 20rem;
+  position: fixed;
+  top: 1rem;
+  right: 2rem;
+  color: white;
+  z-index: 5;
+}
