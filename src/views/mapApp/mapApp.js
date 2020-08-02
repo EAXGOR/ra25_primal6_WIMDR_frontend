@@ -294,10 +294,6 @@ const MainApp = withScriptjs(
         <GoogleMap
           defaultZoom={18}
           defaultCenter={{ lat: location.lat, lng: location.lng }}
-          center={{
-            lat: location.lat,
-            lng: location.lng,
-          }}
           onClick={(obj) => {
             changeNavDestination(null);
             changeNavDestination({ lat: obj.latLng.lat(), lng: obj.latLng.lng() });
