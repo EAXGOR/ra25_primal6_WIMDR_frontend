@@ -43,11 +43,14 @@ const MainApp = withScriptjs(
 
     const [fireGetAlert, getAlertData] = useLazyQuery(GET_ALERT, {
       pollInterval: 10000,
+      fetchPolicy: 'network-only',
     });
     const [getRequest, getRequestData] = useLazyQuery(GET_REQUEST, {
       pollInterval: 10000,
+      fetchPolicy: 'network-only',
     });
     const [getCurrent, getCurrentData] = useLazyQuery(GET_CURRENT, {
+      fetchPolicy: 'network-only',
       onCompleted: (data) => {
         auth.setUser({
           ...auth.user,
@@ -62,6 +65,7 @@ const MainApp = withScriptjs(
       },
     });
     const [getUser, getUserData] = useLazyQuery(GET_USER, {
+      fetchPolicy: 'network-only',
       onCompleted: (data) => {
         if (data?.me) {
           console.log(data);
@@ -282,15 +286,17 @@ const MainApp = withScriptjs(
           navDestination={navDestination}
           startNav={startNav}
         />
-        <CreateEmergency
-          changeEmergencyLocation={changeNavDestination}
-          isApiLoaded={isApiLoaded}
-          navLocation={navDestination}
-          location={location}
-          refetch={getUserData.refetch}
-          getCurrent={getCurrentData.refetch}
-          getCurrentData={getCurrentData}
-        />
+        {auth.user.type !== 'GUEST' ? (
+          <CreateEmergency
+            changeEmergencyLocation={changeNavDestination}
+            isApiLoaded={isApiLoaded}
+            navLocation={navDestination}
+            location={location}
+            refetch={getUserData.refetch}
+            getCurrent={getCurrentData.refetch}
+            getCurrentData={getCurrentData}
+          />
+        ) : null}
         <GoogleMap
           defaultZoom={18}
           defaultCenter={{ lat: location.lat, lng: location.lng }}
@@ -322,12 +328,14 @@ const MainApp = withScriptjs(
             }}
             opacity={navDestination ? 1 : 0}
           />
-          {directionObj ? <DirectionsRenderer directions={directionObj} /> : null}
+          {directionObj ? (
+            <DirectionsRenderer directions={directionObj} options={{ preserveViewport: true }} />
+          ) : null}
           {emergencyDirectionsObj.map((a, index) => {
             return (
               <DirectionsRenderer
                 directions={a}
-                options={{ polylineOptions: { strokeColor: 'red' } }}
+                options={{ polylineOptions: { strokeColor: 'red' }, preserveViewport: true }}
               />
             );
           })}

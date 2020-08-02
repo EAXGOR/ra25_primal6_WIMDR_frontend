@@ -113,14 +113,16 @@ const CreateEmergency = ({
               value={text}
               placeholder="enter description"
             />
-            <span className={styles.span}>
-              <label className={styles.label}>Self Assign this emergency</label>
-              <input
-                type="Checkbox"
-                onChange={(e) => changeCheck(e.target.checked)}
-                value={check}
-              />
-            </span>
+            {auth.user.type === 'PRIORITY_USER' ? (
+              <span className={styles.span}>
+                <label className={styles.label}>Self Assign this emergency</label>
+                <input
+                  type="Checkbox"
+                  onChange={(e) => changeCheck(e.target.checked)}
+                  value={check}
+                />
+              </span>
+            ) : null}
             <button type="submit" className={styles.submit} onClick={handleSubmit}>
               Submit
             </button>
