@@ -32,6 +32,7 @@
     "lint": "eslint --fix src/* --ext .js --ext .jsx && prettier --write \"src/**/*.css\"",
     "lint:ci": "eslint src/* --ext .js --ext .jsx && prettier --check \"src/**/*.css\""
   },
+  "proxy": "https://primal6.tech",
   "husky": {
     "hooks": {
       "pre-commit": "yarn lint-staged"
