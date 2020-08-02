@@ -6,6 +6,7 @@ import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-au
 import styles from './nav.module.css';
 import { ReactComponent as MapSvg } from '../../assets/svgs/maps.svg';
 import { ReactComponent as Burger } from '../../assets/svgs/burger.svg';
+import { useAuth } from '../../context/Context';
 
 export const AutoCompleteInput = ({ changeLatLng, placeholder, navDestination }) => {
   const [address, changeAddress] = useState();
@@ -62,6 +63,7 @@ export const AutoCompleteInput = ({ changeLatLng, placeholder, navDestination })
 };
 
 const NavBar = ({ api, changeNavDestination, navDestination, startNav }) => {
+  const auth = useAuth();
   const [isNavOpen, changeIsNavOpen] = useState(true);
   return (
     <div
@@ -97,6 +99,10 @@ const NavBar = ({ api, changeNavDestination, navDestination, startNav }) => {
           ) : null}
         </div>
       </div>
+      <h2>
+        hi
+        {auth.user.name}
+      </h2>
       <div className={styles.requests} />
     </div>
   );

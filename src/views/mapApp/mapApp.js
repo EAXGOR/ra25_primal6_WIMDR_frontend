@@ -39,6 +39,7 @@ const MainApp = withScriptjs(
     const [userDeg, changeUserDeg] = useState(0);
     const [alertEmergencies, changeAlertEmergencies] = useState([]);
     const [emergencyDirectionsObj, changeEmergencyDirectionsObj] = useState([]);
+    const [currentEmergencyDirectionObj, changeCurrentEmergencyDirectionObj] = useState(null);
     const auth = useAuth();
 
     const [fireGetAlert, getAlertData] = useLazyQuery(GET_ALERT, {
@@ -92,7 +93,7 @@ const MainApp = withScriptjs(
       },
     });
 
-    const startNav = (isNav, origin, destination) => {
+    const startNav = (isNav, isPrioNav, origin, destination) => {
       const directionsService = new window.google.maps.DirectionsService();
       if (isNav) {
         if (navDestination) {
@@ -118,7 +119,26 @@ const MainApp = withScriptjs(
           );
         }
       } else {
-        console.log(origin, destination);
+        if (isPrioNav) {
+          directionsService.route(
+            {
+              origin,
+              destination,
+              travelMode: window.google.maps.TravelMode.DRIVING,
+            },
+            (result, status) => {
+              if (status === window.google.maps.DirectionsStatus.OK) {
+                changeCurrentEmergencyDirectionObj(result);
+                console.log(result);
+              } else {
+                Toast.fire({
+                  icon: 'error',
+                  title: 'Error fetching Directions',
+                });
+              }
+            }
+          );
+        }
         directionsService.route(
           {
             origin,
@@ -231,6 +251,7 @@ const MainApp = withScriptjs(
         alertEmergencies.forEach((element) => {
           startNav(
             false,
+            false,
             createLocation(
               parseFloat(element?.handledBy?.location?.latitude),
               parseFloat(element?.handledBy?.location?.longitude),
@@ -276,6 +297,22 @@ const MainApp = withScriptjs(
         });
       }
     }, [getCurrentData?.data]);
+    useEffect(() => {
+      if (auth.user.currentEmergency) {
+        startNav(
+          false,
+          true,
+          createLocation(parseFloat(location.lat), parseFloat(location.lng), 'LatLng'),
+          createLocation(
+            parseFloat(auth?.user?.currentEmergency?.location?.latitude),
+            parseFloat(auth?.user?.currentEmergency?.location?.longitude),
+            'LatLng'
+          )
+        );
+      }
+    }, [auth?.user?.currentEmergency]);
+
+    console.log(auth);
 
     return (
       <>
@@ -328,17 +365,39 @@ const MainApp = withScriptjs(
             }}
             opacity={navDestination ? 1 : 0}
           />
+          {auth.user.currentEmergency !== null &&
+            getAlertData?.data?.getAlert?.map((a, index) => (
+              <Marker
+                position={{
+                  lat: a.handledBy.location.latitude,
+                  lng: a.handledBy.location.longitude,
+                }}
+                icon={{
+                  url: RotateIcon.makeIcon(ambulanceMark).setRotation({ deg: -userDeg }).getUrl(),
+                  scaledSize: new window.google.maps.Size(60, 60),
+                  origin: new window.google.maps.Point(0, 0),
+                  anchor: new window.google.maps.Point(30, 30),
+                }}
+              />
+            ))}
           {directionObj ? (
             <DirectionsRenderer directions={directionObj} options={{ preserveViewport: true }} />
           ) : null}
-          {emergencyDirectionsObj.map((a, index) => {
-            return (
-              <DirectionsRenderer
-                directions={a}
-                options={{ polylineOptions: { strokeColor: 'red' }, preserveViewport: true }}
-              />
-            );
-          })}
+          {auth?.user?.currentEmergency === undefined || auth?.user?.currentEmergency === null ? (
+            emergencyDirectionsObj.map((a, index) => {
+              return (
+                <DirectionsRenderer
+                  directions={a}
+                  options={{ polylineOptions: { strokeColor: 'red' }, preserveViewport: true }}
+                />
+              );
+            })
+          ) : (
+            <DirectionsRenderer
+              directions={currentEmergencyDirectionObj}
+              options={{ polylineOptions: { strokeColor: 'red' }, preserveViewport: true }}
+            />
+          )}
         </GoogleMap>
       </>
     );
