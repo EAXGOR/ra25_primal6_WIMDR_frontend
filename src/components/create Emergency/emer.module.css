@@ -1,6 +1,6 @@
 .parent {
   position: fixed;
-  top: 14rem;
+  top: 15rem;
   right: 1rem;
   width: 15rem;
   display: flex;
@@ -30,7 +30,7 @@
 }
 .opener {
   position: fixed;
-  top: 10rem;
+  top: 11rem;
   right: 1rem;
   height: 3.5rem;
   width: 3.5rem;

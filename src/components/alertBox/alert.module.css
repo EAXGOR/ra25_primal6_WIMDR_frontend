@@ -6,10 +6,18 @@
   align-content: center;
   background: transparent linear-gradient(90deg, #f32121 0%, #ff6161 100%) 0% 0% no-repeat
     padding-box;
-  width: 20rem;
+  width: 25rem;
   position: fixed;
   top: 1rem;
   right: 2rem;
   color: white;
   z-index: 5;
+  text-align: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  box-sizing: border-box;
+}
+.svg {
+  width: 5rem;
+  height: auto;
 }

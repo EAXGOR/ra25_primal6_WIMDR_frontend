@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-indent */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
@@ -309,10 +310,10 @@ const MainApp = withScriptjs(
             'LatLng'
           )
         );
+      } else {
+        changeCurrentEmergencyDirectionObj(null);
       }
     }, [auth?.user?.currentEmergency]);
-
-    console.log(auth);
 
     return (
       <>
@@ -398,6 +399,22 @@ const MainApp = withScriptjs(
               options={{ polylineOptions: { strokeColor: 'red' }, preserveViewport: true }}
             />
           )}
+          {auth?.user?.currentEmergency === undefined || auth?.user?.currentEmergency === null
+            ? alertEmergencies.map((e) => (
+                <Marker
+                  position={{
+                    lat: e?.handledBy?.location?.latitude,
+                    lng: e?.handledBy?.location?.longitude,
+                  }}
+                  icon={{
+                    url: RotateIcon.makeIcon(ambulanceMark).setRotation({ deg: -userDeg }).getUrl(),
+                    scaledSize: new window.google.maps.Size(60, 60),
+                    origin: new window.google.maps.Point(0, 0),
+                    anchor: new window.google.maps.Point(30, 30),
+                  }}
+                />
+              ))
+            : null}
         </GoogleMap>
       </>
     );

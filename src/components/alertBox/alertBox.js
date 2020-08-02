@@ -4,13 +4,16 @@
 import React from 'react';
 import styles from './alert.module.css';
 import { useAuth } from '../../context/Context';
+import { ReactComponent as Plus } from '../../assets/svgs/alert.svg';
 
 const AlertBox = ({ isActive, showGif }) => {
   const auth = useAuth();
   if (!auth.user.currentEmergency && isActive)
     return (
       <div className={styles.alertBox}>
-        <div className={styles.left}></div>
+        <div className={styles.left}>
+          <Plus className={styles.svg} />
+        </div>
         <div className={styles.right}>
           <h2 className={styles.h2}>Emergency Alert!</h2>
           <p className={styles.p}>
