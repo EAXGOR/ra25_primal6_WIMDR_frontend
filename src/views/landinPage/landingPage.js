@@ -15,6 +15,7 @@ import SIGN_UP from '../../GraphQL/mutation/signup';
 
 import { ReactComponent as Ambulance } from '../../assets/svgs/ambulance.svg';
 import Toast from '../../utils/toast';
+import Loader from '../../components/loader/loader';
 
 const Modal = ({ mode, closeModal }) => {
   const auth = useAuth();
@@ -166,8 +167,12 @@ const Modal = ({ mode, closeModal }) => {
               </span>
             </>
           ) : null}
-          <button type="submit" className={styles.button_modal}>
-            {mode}
+          <button
+            type="submit"
+            className={styles.button_modal}
+            disabled={signinData?.loading || signupData.loading}
+          >
+            {signupData.loading || signinData.loading ? <Loader /> : mode}
           </button>
         </form>
       </div>

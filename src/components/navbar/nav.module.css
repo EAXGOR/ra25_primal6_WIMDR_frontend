@@ -86,3 +86,15 @@
 .nav_close {
   cursor: pointer;
 }
+.requests {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  background: transparent linear-gradient(90deg, #f32121 0%, #ff6161 100%) 0% 0% no-repeat
+    padding-box;
+  color: white;
+  text-align: center;
+}

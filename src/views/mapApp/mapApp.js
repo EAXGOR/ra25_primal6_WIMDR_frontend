@@ -314,6 +314,7 @@ const MainApp = withScriptjs(
         changeCurrentEmergencyDirectionObj(null);
       }
     }, [auth?.user?.currentEmergency]);
+    console.log(auth);
 
     return (
       <>
@@ -323,6 +324,8 @@ const MainApp = withScriptjs(
           changeNavDestination={changeNavDestination}
           navDestination={navDestination}
           startNav={startNav}
+          refetch={getUserData.refetch}
+          getCurrent={getCurrentData.refetch}
         />
         {auth.user.type !== 'GUEST' ? (
           <CreateEmergency

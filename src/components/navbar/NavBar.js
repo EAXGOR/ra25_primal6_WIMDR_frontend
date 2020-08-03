@@ -1,12 +1,19 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react/jsx-indent */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
-
+import { useMutation } from '@apollo/react-hooks';
 import styles from './nav.module.css';
 import { ReactComponent as MapSvg } from '../../assets/svgs/maps.svg';
 import { ReactComponent as Burger } from '../../assets/svgs/burger.svg';
 import { useAuth } from '../../context/Context';
+import HANDLE_EMERGENCY from '../../GraphQL/mutation/handleRequest';
+import SIGN_OUT from '../../GraphQL/mutation/signout';
+import Toast from '../../utils/toast';
 
 export const AutoCompleteInput = ({ changeLatLng, placeholder, navDestination }) => {
   const [address, changeAddress] = useState();
@@ -62,9 +69,70 @@ export const AutoCompleteInput = ({ changeLatLng, placeholder, navDestination })
   );
 };
 
-const NavBar = ({ api, changeNavDestination, navDestination, startNav }) => {
+const NavBar = ({ api, changeNavDestination, navDestination, startNav, refetch, getCurrent }) => {
   const auth = useAuth();
   const [isNavOpen, changeIsNavOpen] = useState(true);
+  const history = useHistory();
+
+  const [handleEmergency, handleEmergencyData] = useMutation(HANDLE_EMERGENCY, {
+    onComplete: (data) => {
+      Toast.fire({
+        icon: 'success',
+        title: 'Handling Request successfully sent',
+      });
+      refetch();
+      getCurrent();
+    },
+    onError: (error) => {
+      Toast.fire({
+        icon: 'error',
+        title: error.message,
+      });
+    },
+  });
+
+  const [signout, signoutData] = useMutation(SIGN_OUT, {
+    onCompleted: (data) => {
+      Toast.fire({
+        icon: 'success',
+        title: 'Signed Out Successfully',
+      });
+      auth.setUser({
+        type: null,
+        id: null,
+        name: null,
+        email: null,
+        phone: null,
+      });
+      auth.setIsLoggedIn(false);
+      history.push('/');
+    },
+    onError: (error) => {
+      Toast.fire({
+        icon: 'error',
+        title: error.message,
+      });
+    },
+  });
+  const handleSignOut = () => {
+    if (auth.user.type === 'GUEST') {
+      auth.setUser({
+        type: null,
+        id: null,
+        name: null,
+        email: null,
+        phone: null,
+      });
+      auth.setIsLoggedIn(false);
+    } else signout();
+  };
+  const handleAccept = (id) => {
+    handleEmergency({
+      variables: {
+        emergencyID: id,
+      },
+    });
+  };
   return (
     <div
       className={isNavOpen ? styles.nav_parent : `${styles.nav_parent} ${styles.nav_parent_close}`}
@@ -100,10 +168,27 @@ const NavBar = ({ api, changeNavDestination, navDestination, startNav }) => {
         </div>
       </div>
       <h2>
-        hi
+        hi&nbsp;
         {auth.user.name}
       </h2>
-      <div className={styles.requests} />
+      {auth?.user?.emergenciesRequests !== null || auth?.user?.emergenciesRequests !== undefined
+        ? auth?.user?.emergenciesRequests?.map((e) => (
+            <div className={styles.requests}>
+              There's an Emergency Request at latitude : {e?.location?.latitude} and longitude :
+              {e?.location?.longitude}
+              <button
+                type="button"
+                onClick={() => handleAccept(e.id)}
+                className={styles.accept_button}
+              >
+                Accept
+              </button>
+            </div>
+          ))
+        : null}
+      <button type="button" className={styles.signout} onClick={handleSignOut}>
+        Signout
+      </button>
     </div>
   );
 };
