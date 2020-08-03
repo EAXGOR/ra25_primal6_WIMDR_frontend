@@ -4,7 +4,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import { useMutation } from '@apollo/react-hooks';
 import styles from './nav.module.css';
@@ -186,6 +186,13 @@ const NavBar = ({ api, changeNavDestination, navDestination, startNav, refetch, 
             </div>
           ))
         : null}
+      <div style={{ marginTop: '20px', marginRight: '40px', marginBottom: '20px' }}>
+        <Link to="/howtohelp">
+          <div>
+            <ul>How to help ?</ul>
+          </div>
+        </Link>
+      </div>
       <button type="button" className={styles.signout} onClick={handleSignOut}>
         Signout
       </button>

@@ -98,3 +98,29 @@
   color: white;
   text-align: center;
 }
+
+.nav_button {
+  border: "none";
+  margin-top: 10px;
+  border-radius: 20px;
+  background: #00a8ff;
+  align-content: center;
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  height: 45px;
+  width: 130px;
+}
+
+.signout {
+  border: "none";
+  margin-top: 10px;
+  border-radius: 20px;
+  background: #00a8ff;
+  align-content: center;
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  height: 45px;
+  width: 130px;
+}
