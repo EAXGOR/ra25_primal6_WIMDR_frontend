@@ -29,7 +29,7 @@ function App() {
             <Route exact path="/map">
               {isLoggedIn ? (
                 <MainApp
-                  googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBbimgXHjyObzS-WpF4LXZ1T1585TnEoh4&v=3.exp&libraries=geometry,drawing,places"
+                  googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzTMGTd-pTdPr5_Xo-xxpl-Jjd-CbpPtw&v=3.exp&libraries=geometry,drawing,places"
                   loadingElement={<div style={{ height: `100vh` }} />}
                   containerElement={<div style={{ height: `100vh` }} />}
                   mapElement={<div style={{ height: `100%` }} />}
